@@ -53,7 +53,7 @@ repos:
         name: lint
         entry: ./scripts/lint.sh
         types: [python]
-        language: system
+        language: script
 
 ci:
   autofix_commit_msg: "[pre-commit.ci] Auto-fix from pre-commit"
