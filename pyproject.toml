@@ -29,6 +29,7 @@ dev = [
     "flake8-docstrings >=1.6.0",
     "types-protobuf >=3.19.12",
     "grpcio-tools >=1.46.0",
+    "pre-commit >=2.19.0",
 ]
 
 [tool.isort]

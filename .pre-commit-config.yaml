@@ -47,14 +47,6 @@ repos:
     hooks:
       - id: black
 
-  - repo: local
-    hooks:
-      - id: lint
-        name: lint
-        entry: ./scripts/lint.sh
-        types: [python]
-        language: script
-
 ci:
   autofix_commit_msg: "[pre-commit.ci] Auto-fix from pre-commit"
   autoupdate_commit_msg: "[pre-commit.ci] Auto-update from pre-commit"
