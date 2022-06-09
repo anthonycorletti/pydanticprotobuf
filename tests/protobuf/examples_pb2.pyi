@@ -4,13 +4,14 @@ isort:skip_file
 """
 import builtins
 import google.protobuf.descriptor
+import google.protobuf.internal.containers
 import google.protobuf.message
 import typing
 import typing_extensions
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
-class SimpleItemProto(google.protobuf.message.Message):
+class ItemProto(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     NAME_FIELD_NUMBER: builtins.int
     AMOUNT_FIELD_NUMBER: builtins.int
@@ -32,4 +33,154 @@ class SimpleItemProto(google.protobuf.message.Message):
         ],
     ) -> None: ...
 
-global___SimpleItemProto = SimpleItemProto
+global___ItemProto = ItemProto
+
+class ItemProtoWithRepeated(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    NAME_FIELD_NUMBER: builtins.int
+    AMOUNT_FIELD_NUMBER: builtins.int
+    ACTIVE_FIELD_NUMBER: builtins.int
+    EXTRAS_FIELD_NUMBER: builtins.int
+    name: typing.Text
+    amount: builtins.int
+    active: builtins.bool
+    @property
+    def extras(
+        self,
+    ) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[
+        typing.Text
+    ]: ...
+    def __init__(
+        self,
+        *,
+        name: typing.Text = ...,
+        amount: builtins.int = ...,
+        active: builtins.bool = ...,
+        extras: typing.Optional[typing.Iterable[typing.Text]] = ...,
+    ) -> None: ...
+    def ClearField(
+        self,
+        field_name: typing_extensions.Literal[
+            "active",
+            b"active",
+            "amount",
+            b"amount",
+            "extras",
+            b"extras",
+            "name",
+            b"name",
+        ],
+    ) -> None: ...
+
+global___ItemProtoWithRepeated = ItemProtoWithRepeated
+
+class ItemProtoWithMap(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    class DataEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: typing.Text
+        value: typing.Text
+        def __init__(
+            self,
+            *,
+            key: typing.Text = ...,
+            value: typing.Text = ...,
+        ) -> None: ...
+        def ClearField(
+            self,
+            field_name: typing_extensions.Literal["key", b"key", "value", b"value"],
+        ) -> None: ...
+
+    NAME_FIELD_NUMBER: builtins.int
+    AMOUNT_FIELD_NUMBER: builtins.int
+    ACTIVE_FIELD_NUMBER: builtins.int
+    DATA_FIELD_NUMBER: builtins.int
+    name: typing.Text
+    amount: builtins.int
+    active: builtins.bool
+    @property
+    def data(
+        self,
+    ) -> google.protobuf.internal.containers.ScalarMap[typing.Text, typing.Text]: ...
+    def __init__(
+        self,
+        *,
+        name: typing.Text = ...,
+        amount: builtins.int = ...,
+        active: builtins.bool = ...,
+        data: typing.Optional[typing.Mapping[typing.Text, typing.Text]] = ...,
+    ) -> None: ...
+    def ClearField(
+        self,
+        field_name: typing_extensions.Literal[
+            "active", b"active", "amount", b"amount", "data", b"data", "name", b"name"
+        ],
+    ) -> None: ...
+
+global___ItemProtoWithMap = ItemProtoWithMap
+
+class ItemProtoWithSubItem(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    NAME_FIELD_NUMBER: builtins.int
+    AMOUNT_FIELD_NUMBER: builtins.int
+    ACTIVE_FIELD_NUMBER: builtins.int
+    ITEM_FIELD_NUMBER: builtins.int
+    name: typing.Text
+    amount: builtins.int
+    active: builtins.bool
+    @property
+    def item(self) -> global___ItemProto: ...
+    def __init__(
+        self,
+        *,
+        name: typing.Text = ...,
+        amount: builtins.int = ...,
+        active: builtins.bool = ...,
+        item: typing.Optional[global___ItemProto] = ...,
+    ) -> None: ...
+    def HasField(
+        self, field_name: typing_extensions.Literal["item", b"item"]
+    ) -> builtins.bool: ...
+    def ClearField(
+        self,
+        field_name: typing_extensions.Literal[
+            "active", b"active", "amount", b"amount", "item", b"item", "name", b"name"
+        ],
+    ) -> None: ...
+
+global___ItemProtoWithSubItem = ItemProtoWithSubItem
+
+class ItemProtoWithRepeatedItems(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    NAME_FIELD_NUMBER: builtins.int
+    AMOUNT_FIELD_NUMBER: builtins.int
+    ACTIVE_FIELD_NUMBER: builtins.int
+    ITEMS_FIELD_NUMBER: builtins.int
+    name: typing.Text
+    amount: builtins.int
+    active: builtins.bool
+    @property
+    def items(
+        self,
+    ) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[
+        global___ItemProto
+    ]: ...
+    def __init__(
+        self,
+        *,
+        name: typing.Text = ...,
+        amount: builtins.int = ...,
+        active: builtins.bool = ...,
+        items: typing.Optional[typing.Iterable[global___ItemProto]] = ...,
+    ) -> None: ...
+    def ClearField(
+        self,
+        field_name: typing_extensions.Literal[
+            "active", b"active", "amount", b"amount", "items", b"items", "name", b"name"
+        ],
+    ) -> None: ...
+
+global___ItemProtoWithRepeatedItems = ItemProtoWithRepeatedItems

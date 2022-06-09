@@ -2,8 +2,36 @@ syntax = "proto3";
 
 package examples;
 
-message SimpleItemProto {
+message ItemProto {
   string name = 1;
   int32 amount = 2;
   bool active = 3;
+}
+
+message ItemProtoWithRepeated {
+  string name = 1;
+  int32 amount = 2;
+  bool active = 3;
+  repeated string extras = 4;
+}
+
+message ItemProtoWithMap {
+  string name = 1;
+  int32 amount = 2;
+  bool active = 3;
+  map<string, string> data = 4;
+}
+
+message ItemProtoWithSubItem {
+  string name = 1;
+  int32 amount = 2;
+  bool active = 3;
+  ItemProto item = 4;
+}
+
+message ItemProtoWithRepeatedItems {
+  string name = 1;
+  int32 amount = 2;
+  bool active = 3;
+  repeated ItemProto items = 4;
 }
