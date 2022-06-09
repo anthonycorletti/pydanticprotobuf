@@ -21,8 +21,8 @@ def BaseModelToMessage(
     Returns:
         Message: The populated protobuf message.
     """
-    return json_format.ParseDict(
-        js_dict=basemodel.dict(),
+    return json_format.Parse(
+        text=basemodel.json().encode("utf8"),
         message=message,
         ignore_unknown_fields=ignore_unknown_fields,
     )
@@ -33,6 +33,7 @@ def MessageToBaseModel(
     message: Message,
     including_default_value_fields: bool = True,
     preserving_proto_field_name: bool = False,
+    use_integers_for_enums: bool = True,
 ) -> BaseModel:
     """Converts a protobuf message to a pydantic BaseModel.
 
@@ -51,10 +52,11 @@ def MessageToBaseModel(
     Returns:
         BaseModel: The populated pydantic object.
     """
-    return basemodel(
-        **json_format.MessageToDict(
+    return basemodel.parse_raw(
+        json_format.MessageToJson(
             message=message,
             including_default_value_fields=including_default_value_fields,
             preserving_proto_field_name=preserving_proto_field_name,
+            use_integers_for_enums=use_integers_for_enums,
         )
     )

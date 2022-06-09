@@ -2,6 +2,11 @@ syntax = "proto3";
 
 package examples;
 
+enum ItemType {
+  TYPE_0 = 0;
+  TYPE_1 = 1;
+}
+
 message ItemProto {
   string name = 1;
   int32 amount = 2;
@@ -34,4 +39,11 @@ message ItemProtoWithRepeatedItems {
   int32 amount = 2;
   bool active = 3;
   repeated ItemProto items = 4;
+}
+
+message ItemProtoWithEnum {
+  string name = 1;
+  int32 amount = 2;
+  bool active = 3;
+  ItemType type = 4;
 }

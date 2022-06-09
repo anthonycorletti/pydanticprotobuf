@@ -6,6 +6,7 @@ from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
+from google.protobuf.internal import enum_type_wrapper
 
 # @@protoc_insertion_point(imports)
 
@@ -13,8 +14,13 @@ _sym_db = _symbol_database.Default()
 
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x17protobuf/examples.proto\x12\x08\x65xamples"9\n\tItemProto\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08"U\n\x15ItemProtoWithRepeated\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12\x0e\n\x06\x65xtras\x18\x04 \x03(\t"\xa1\x01\n\x10ItemProtoWithMap\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12\x32\n\x04\x64\x61ta\x18\x04 \x03(\x0b\x32$.examples.ItemProtoWithMap.DataEntry\x1a+\n\tDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"g\n\x14ItemProtoWithSubItem\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12!\n\x04item\x18\x04 \x01(\x0b\x32\x13.examples.ItemProto"n\n\x1aItemProtoWithRepeatedItems\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12"\n\x05items\x18\x04 \x03(\x0b\x32\x13.examples.ItemProtob\x06proto3'
+    b'\n\x17protobuf/examples.proto\x12\x08\x65xamples"9\n\tItemProto\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08"U\n\x15ItemProtoWithRepeated\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12\x0e\n\x06\x65xtras\x18\x04 \x03(\t"\xa1\x01\n\x10ItemProtoWithMap\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12\x32\n\x04\x64\x61ta\x18\x04 \x03(\x0b\x32$.examples.ItemProtoWithMap.DataEntry\x1a+\n\tDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"g\n\x14ItemProtoWithSubItem\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12!\n\x04item\x18\x04 \x01(\x0b\x32\x13.examples.ItemProto"n\n\x1aItemProtoWithRepeatedItems\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12"\n\x05items\x18\x04 \x03(\x0b\x32\x13.examples.ItemProto"c\n\x11ItemProtoWithEnum\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0e\n\x06\x61mount\x18\x02 \x01(\x05\x12\x0e\n\x06\x61\x63tive\x18\x03 \x01(\x08\x12 \n\x04type\x18\x04 \x01(\x0e\x32\x12.examples.ItemType*"\n\x08ItemType\x12\n\n\x06TYPE_0\x10\x00\x12\n\n\x06TYPE_1\x10\x01\x62\x06proto3'
 )
+
+_ITEMTYPE = DESCRIPTOR.enum_types_by_name["ItemType"]
+ItemType = enum_type_wrapper.EnumTypeWrapper(_ITEMTYPE)
+TYPE_0 = 0
+TYPE_1 = 1
 
 
 _ITEMPROTO = DESCRIPTOR.message_types_by_name["ItemProto"]
@@ -25,6 +31,7 @@ _ITEMPROTOWITHSUBITEM = DESCRIPTOR.message_types_by_name["ItemProtoWithSubItem"]
 _ITEMPROTOWITHREPEATEDITEMS = DESCRIPTOR.message_types_by_name[
     "ItemProtoWithRepeatedItems"
 ]
+_ITEMPROTOWITHENUM = DESCRIPTOR.message_types_by_name["ItemProtoWithEnum"]
 ItemProto = _reflection.GeneratedProtocolMessageType(
     "ItemProto",
     (_message.Message,),
@@ -90,11 +97,24 @@ ItemProtoWithRepeatedItems = _reflection.GeneratedProtocolMessageType(
 )
 _sym_db.RegisterMessage(ItemProtoWithRepeatedItems)
 
+ItemProtoWithEnum = _reflection.GeneratedProtocolMessageType(
+    "ItemProtoWithEnum",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _ITEMPROTOWITHENUM,
+        "__module__": "protobuf.examples_pb2"
+        # @@protoc_insertion_point(class_scope:examples.ItemProtoWithEnum)
+    },
+)
+_sym_db.RegisterMessage(ItemProtoWithEnum)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
     DESCRIPTOR._options = None
     _ITEMPROTOWITHMAP_DATAENTRY._options = None
     _ITEMPROTOWITHMAP_DATAENTRY._serialized_options = b"8\001"
+    _ITEMTYPE._serialized_start = 665
+    _ITEMTYPE._serialized_end = 699
     _ITEMPROTO._serialized_start = 37
     _ITEMPROTO._serialized_end = 94
     _ITEMPROTOWITHREPEATED._serialized_start = 96
@@ -107,4 +127,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _ITEMPROTOWITHSUBITEM._serialized_end = 450
     _ITEMPROTOWITHREPEATEDITEMS._serialized_start = 452
     _ITEMPROTOWITHREPEATEDITEMS._serialized_end = 562
+    _ITEMPROTOWITHENUM._serialized_start = 564
+    _ITEMPROTOWITHENUM._serialized_end = 663
 # @@protoc_insertion_point(module_scope)

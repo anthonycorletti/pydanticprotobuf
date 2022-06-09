@@ -5,11 +5,31 @@ isort:skip_file
 import builtins
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
+import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 import typing
 import typing_extensions
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+
+class _ItemType:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _ItemTypeEnumTypeWrapper(
+    google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ItemType.ValueType],
+    builtins.type,
+):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    TYPE_0: _ItemType.ValueType  # 0
+    TYPE_1: _ItemType.ValueType  # 1
+
+class ItemType(_ItemType, metaclass=_ItemTypeEnumTypeWrapper):
+    pass
+
+TYPE_0: ItemType.ValueType  # 0
+TYPE_1: ItemType.ValueType  # 1
+global___ItemType = ItemType
 
 class ItemProto(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -184,3 +204,30 @@ class ItemProtoWithRepeatedItems(google.protobuf.message.Message):
     ) -> None: ...
 
 global___ItemProtoWithRepeatedItems = ItemProtoWithRepeatedItems
+
+class ItemProtoWithEnum(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    NAME_FIELD_NUMBER: builtins.int
+    AMOUNT_FIELD_NUMBER: builtins.int
+    ACTIVE_FIELD_NUMBER: builtins.int
+    TYPE_FIELD_NUMBER: builtins.int
+    name: typing.Text
+    amount: builtins.int
+    active: builtins.bool
+    type: global___ItemType.ValueType
+    def __init__(
+        self,
+        *,
+        name: typing.Text = ...,
+        amount: builtins.int = ...,
+        active: builtins.bool = ...,
+        type: global___ItemType.ValueType = ...,
+    ) -> None: ...
+    def ClearField(
+        self,
+        field_name: typing_extensions.Literal[
+            "active", b"active", "amount", b"amount", "name", b"name", "type", b"type"
+        ],
+    ) -> None: ...
+
+global___ItemProtoWithEnum = ItemProtoWithEnum

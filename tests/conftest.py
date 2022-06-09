@@ -1,3 +1,4 @@
+from enum import Enum, unique
 from typing import Dict, List
 
 import pytest
@@ -6,11 +7,18 @@ from pydantic import BaseModel
 
 from tests.protobuf.examples_pb2 import (
     ItemProto,
+    ItemProtoWithEnum,
     ItemProtoWithMap,
     ItemProtoWithRepeated,
     ItemProtoWithRepeatedItems,
     ItemProtoWithSubItem,
 )
+
+
+@unique
+class ItemType(Enum):
+    TYPE_0 = 0
+    TYPE_1 = 1
 
 
 class ItemModel(BaseModel):
@@ -35,12 +43,17 @@ class ItemModelWithItemList(ItemModel):
     items: List[ItemModel] = [ItemModel(), ItemModel()]
 
 
+class ItemModelWithEnum(ItemModel):
+    type: ItemType = ItemType.TYPE_1
+
+
 MODELS = [
     ItemModel,
     ItemModelWithList,
     ItemModelWithDict,
     ItemModelWithItem,
     ItemModelWithItemList,
+    ItemModelWithEnum,
 ]
 MODEL_DISPATCH_TABLE = {model.__name__: model() for model in MODELS}
 
@@ -50,6 +63,7 @@ MESSAGES = [
     ItemProtoWithMap,
     ItemProtoWithSubItem,
     ItemProtoWithRepeatedItems,
+    ItemProtoWithEnum,
 ]
 MESSAGE_DISPATCH_TABLE = {message.__name__: message() for message in MESSAGES}
 

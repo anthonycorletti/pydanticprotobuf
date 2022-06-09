@@ -6,12 +6,15 @@ from pydanticprotobuf import BaseModelToMessage, MessageToBaseModel
 from tests.conftest import (
     ItemModel,
     ItemModelWithDict,
+    ItemModelWithEnum,
     ItemModelWithItem,
     ItemModelWithItemList,
     ItemModelWithList,
+    ItemType,
 )
 from tests.protobuf.examples_pb2 import (
     ItemProto,
+    ItemProtoWithEnum,
     ItemProtoWithMap,
     ItemProtoWithRepeated,
     ItemProtoWithRepeatedItems,
@@ -39,12 +42,7 @@ def test_conversion_to_model(message: Message) -> None:
     assert message.name == "Name"
     assert message.amount == 2
     assert message.active is True
-    _model = MessageToBaseModel(
-        basemodel=ItemModel,
-        message=message,
-        including_default_value_fields=True,
-        preserving_proto_field_name=False,
-    )
+    _model = MessageToBaseModel(basemodel=ItemModel, message=message)
     assert type(_model) == ItemModel
     assert _model.name == "Name"
     assert _model.amount == 2
@@ -76,12 +74,7 @@ def test_conversion_to_model_with_repeated(message: Message) -> None:
     assert message.amount == 2
     assert message.active is True
     assert message.extras == ["a", "b"]
-    _model = MessageToBaseModel(
-        basemodel=ItemModelWithList,
-        message=message,
-        including_default_value_fields=True,
-        preserving_proto_field_name=False,
-    )
+    _model = MessageToBaseModel(basemodel=ItemModelWithList, message=message)
     assert type(_model) == ItemModelWithList
     assert _model.name == "Name"
     assert _model.amount == 2
@@ -112,12 +105,7 @@ def test_conversion_to_model_with_dict(message: Message) -> None:
     assert message.amount == 2
     assert message.active is True
     assert message.data == {"key": "value", "key2": "value2"}
-    _model = MessageToBaseModel(
-        basemodel=ItemModelWithDict,
-        message=message,
-        including_default_value_fields=True,
-        preserving_proto_field_name=False,
-    )
+    _model = MessageToBaseModel(basemodel=ItemModelWithDict, message=message)
     assert type(_model) == ItemModelWithDict
     assert _model.name == "Name"
     assert _model.amount == 2
@@ -156,12 +144,7 @@ def test_conversion_to_model_with_sub_item(message: Message) -> None:
     assert message.item.name == "Name"
     assert message.item.amount == 2
     assert message.item.active is True
-    _model = MessageToBaseModel(
-        basemodel=ItemModelWithItem,
-        message=message,
-        including_default_value_fields=True,
-        preserving_proto_field_name=False,
-    )
+    _model = MessageToBaseModel(basemodel=ItemModelWithItem, message=message)
     assert type(_model) == ItemModelWithItem
     assert _model.name == "Name"
     assert _model.amount == 2
@@ -211,12 +194,7 @@ def test_conversion_to_model_with_sub_item_list(message: Message) -> None:
     assert message.items[1].name == "Name"
     assert message.items[1].amount == 2
     assert message.items[1].active is True
-    _model = MessageToBaseModel(
-        basemodel=ItemModelWithItemList,
-        message=message,
-        including_default_value_fields=True,
-        preserving_proto_field_name=False,
-    )
+    _model = MessageToBaseModel(basemodel=ItemModelWithItemList, message=message)
     assert type(_model) == ItemModelWithItemList
     assert _model.name == "Name"
     assert _model.amount == 2
@@ -227,3 +205,34 @@ def test_conversion_to_model_with_sub_item_list(message: Message) -> None:
     assert _model.items[1].name == "Name"
     assert _model.items[1].amount == 2
     assert _model.items[1].active is True
+
+
+@pytest.mark.parametrize("model_name", ["ItemModelWithEnum"])
+@pytest.mark.parametrize("message_name", ["ItemProtoWithEnum"])
+def test_conversion_to_message_with_enum(model: BaseModel, message: Message) -> None:
+    assert type(model) == ItemModelWithEnum
+    assert model.name == "Name"
+    assert model.amount == 2
+    assert model.active is True
+    assert model.type == ItemType.TYPE_1
+    _message = BaseModelToMessage(basemodel=model, message=message)
+    assert type(_message) == ItemProtoWithEnum
+    assert _message.name == "Name"
+    assert _message.amount == 2
+    assert _message.active is True
+    assert _message.type == 1
+
+
+@pytest.mark.parametrize("message_name", ["ItemProtoWithEnum"])
+def test_conversion_to_model_with_enum(message: Message) -> None:
+    assert type(message) == ItemProtoWithEnum
+    assert message.name == "Name"
+    assert message.amount == 2
+    assert message.active is True
+    assert message.type == 1
+    _model = MessageToBaseModel(basemodel=ItemModelWithEnum, message=message)
+    assert type(_model) == ItemModelWithEnum
+    assert _model.name == "Name"
+    assert _model.amount == 2
+    assert _model.active is True
+    assert _model.type == ItemType.TYPE_1
