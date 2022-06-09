@@ -1,8 +1,7 @@
 """pydanticprotobuf"""
 
-from pydanticprotobuf.main import PydanticProtobuf
+from pydanticprotobuf.main import BaseModelToMessage, MessageToBaseModel
 
-__version__ = "v0.0.2"
+__version__ = "v0.1.0"
 
-pydanticprotobuf = PydanticProtobuf()
-__all__ = ["pydanticprotobuf"]
+__all__ = ["BaseModelToMessage", "MessageToBaseModel"]

@@ -1,24 +1,35 @@
-from google.cloud.container_v1.types import Cluster
-from pydantic.main import ModelMetaclass
-
-from pydanticprotobuf import pydanticprotobuf
-from tests.assets.example_map_pb2 import Payload
-from tests.assets.example_pb2 import TestMessage
+from pydanticprotobuf import BaseModelToMessage, MessageToBaseModel
+from tests.conftest import SimpleItemModel, SimpleItemProto
 
 
-def test_example_conversion() -> None:
-    result = pydanticprotobuf.convert_protobuf(message=TestMessage)
-    assert isinstance(result, ModelMetaclass)
-    assert result.__name__ == TestMessage.__name__
+def test_simple_conversion_to_message(
+    simple_item_model: SimpleItemModel, simple_item_message: SimpleItemProto
+) -> None:
+    assert type(simple_item_model) == SimpleItemModel
+    assert simple_item_model.name == "Name"
+    assert simple_item_model.amount == 2
+    assert simple_item_model.active is True
+    message = BaseModelToMessage(
+        basemodel=simple_item_model, message=simple_item_message
+    )
+    assert type(message) == SimpleItemProto
+    assert message.name == "Name"
+    assert message.amount == 2
+    assert message.active is True
 
 
-def test_example_map_conversion() -> None:
-    result = pydanticprotobuf.convert_protobuf(message=Payload)
-    assert isinstance(result, ModelMetaclass)
-    assert result.__name__ == Payload.__name__
-
-
-def test_gcp_cluster_conversion() -> None:
-    result = pydanticprotobuf.convert_protobuf(message=Cluster.pb())
-    assert isinstance(result, ModelMetaclass)
-    assert result.__name__ == Cluster.__name__
+def test_simple_conversion_to_model(simple_item_message: SimpleItemProto) -> None:
+    assert type(simple_item_message) == SimpleItemProto
+    assert simple_item_message.name == "Name"
+    assert simple_item_message.amount == 2
+    assert simple_item_message.active is True
+    model = MessageToBaseModel(
+        basemodel=SimpleItemModel,
+        message=simple_item_message,
+        including_default_value_fields=True,
+        preserving_proto_field_name=False,
+    )
+    assert type(model) == SimpleItemModel
+    assert model.name == "Name"
+    assert model.amount == 2
+    assert model.active is True
