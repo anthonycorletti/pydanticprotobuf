@@ -1,7 +1,3 @@
-import pytest
-from google.protobuf.message import Message
-from pydantic import BaseModel
-
 from pydanticprotobuf import BaseModelToMessage, MessageToBaseModel
 from tests.conftest import (
     ItemModel,
@@ -22,217 +18,267 @@ from tests.protobuf.examples_pb2 import (
 )
 
 
-@pytest.mark.parametrize("model_name", ["ItemModel"])
-@pytest.mark.parametrize("message_name", ["ItemProto"])
-def test_conversion_to_message(model: BaseModel, message: Message) -> None:
-    assert type(model) == ItemModel
-    assert model.name == "Name"
-    assert model.amount == 2
-    assert model.active is True
-    _message = BaseModelToMessage(basemodel=model, message=message)
-    assert type(_message) == ItemProto
-    assert _message.name == "Name"
-    assert _message.amount == 2
-    assert _message.active is True
+def test_model_to_message() -> None:
+    d = ItemModel(name="name", amount=42, active=True)
+    m = BaseModelToMessage(basemodel=d, message=ItemProto)
+    assert type(m) == ItemProto
+    assert m.name == "name"
+    assert m.amount == 42
+    assert m.active is True
+    assert m.IsInitialized()
+
+    new_d = MessageToBaseModel(basemodel=ItemModel, message=m)
+    assert type(new_d) == ItemModel
+    assert new_d.name == "name"
+    assert new_d.amount == 42
+    assert new_d.active is True
 
 
-@pytest.mark.parametrize("message_name", ["ItemProto"])
-def test_conversion_to_model(message: Message) -> None:
-    assert type(message) == ItemProto
-    assert message.name == "Name"
-    assert message.amount == 2
-    assert message.active is True
-    _model = MessageToBaseModel(basemodel=ItemModel, message=message)
-    assert type(_model) == ItemModel
-    assert _model.name == "Name"
-    assert _model.amount == 2
-    assert _model.active is True
+def test_message_to_model() -> None:
+    m = ItemProto(name="name", amount=42, active=True)
+    d = MessageToBaseModel(basemodel=ItemModel, message=m)
+    assert type(d) == ItemModel
+    assert d.name == "name"
+    assert d.amount == 42
+    assert d.active is True
+
+    new_m = BaseModelToMessage(basemodel=d, message=ItemProto)
+    assert type(new_m) == ItemProto
+    assert new_m.name == "name"
+    assert new_m.amount == 42
+    assert new_m.active is True
+    assert new_m.IsInitialized()
 
 
-@pytest.mark.parametrize("model_name", ["ItemModelWithList"])
-@pytest.mark.parametrize("message_name", ["ItemProtoWithRepeated"])
-def test_conversion_to_message_with_repeated(
-    model: BaseModel, message: Message
-) -> None:
-    assert type(model) == ItemModelWithList
-    assert model.name == "Name"
-    assert model.amount == 2
-    assert model.active is True
-    assert model.extras == ["a", "b"]
-    _message = BaseModelToMessage(basemodel=model, message=message)
-    assert type(_message) == ItemProtoWithRepeated
-    assert _message.name == "Name"
-    assert _message.amount == 2
-    assert _message.active is True
-    assert _message.extras == ["a", "b"]
+def test_message_with_repeated_to_model() -> None:
+    m = ItemProtoWithRepeated(name="name?", amount=42, active=True, extras=["a", "b"])
+    d = MessageToBaseModel(basemodel=ItemModelWithList, message=m)
+    assert type(d) == ItemModelWithList
+    assert d.name == "name?"
+    assert d.amount == 42
+    assert d.active is True
+    assert d.extras == ["a", "b"]
+
+    new_m = BaseModelToMessage(basemodel=d, message=ItemProtoWithRepeated)
+    assert type(new_m) == ItemProtoWithRepeated
+    assert new_m.name == "name?"
+    assert new_m.amount == 42
+    assert new_m.active is True
+    assert new_m.extras == ["a", "b"]
+    assert new_m.IsInitialized()
 
 
-@pytest.mark.parametrize("message_name", ["ItemProtoWithRepeated"])
-def test_conversion_to_model_with_repeated(message: Message) -> None:
-    assert type(message) == ItemProtoWithRepeated
-    assert message.name == "Name"
-    assert message.amount == 2
-    assert message.active is True
-    assert message.extras == ["a", "b"]
-    _model = MessageToBaseModel(basemodel=ItemModelWithList, message=message)
-    assert type(_model) == ItemModelWithList
-    assert _model.name == "Name"
-    assert _model.amount == 2
-    assert _model.active is True
-    assert _model.extras == ["a", "b"]
+def test_model_to_message_with_repeated() -> None:
+    d = ItemModelWithList(name="name?", amount=42, active=True, extras=["a", "b"])
+    m = BaseModelToMessage(basemodel=d, message=ItemProtoWithRepeated)
+    assert type(m) == ItemProtoWithRepeated
+    assert m.name == "name?"
+    assert m.amount == 42
+    assert m.active is True
+    assert m.extras == ["a", "b"]
+    assert m.IsInitialized()
+
+    new_d = MessageToBaseModel(basemodel=ItemModelWithList, message=m)
+    assert type(new_d) == ItemModelWithList
+    assert new_d.name == "name?"
+    assert new_d.amount == 42
+    assert new_d.active is True
+    assert new_d.extras == ["a", "b"]
 
 
-@pytest.mark.parametrize("model_name", ["ItemModelWithDict"])
-@pytest.mark.parametrize("message_name", ["ItemProtoWithMap"])
-def test_conversion_to_message_with_dict(model: BaseModel, message: Message) -> None:
-    assert type(model) == ItemModelWithDict
-    assert model.name == "Name"
-    assert model.amount == 2
-    assert model.active is True
-    assert model.data == {"key": "value", "key2": "value2"}
-    _message = BaseModelToMessage(basemodel=model, message=message)
-    assert type(_message) == ItemProtoWithMap
-    assert _message.name == "Name"
-    assert _message.amount == 2
-    assert _message.active is True
-    assert _message.data == {"key": "value", "key2": "value2"}
+def test_message_with_map_to_model() -> None:
+    m = ItemProtoWithMap(name="name?", amount=42, active=True, data={"a": "b"})
+    d = MessageToBaseModel(basemodel=ItemModelWithDict, message=m)
+    assert type(d) == ItemModelWithDict
+    assert d.name == "name?"
+    assert d.amount == 42
+    assert d.active is True
+    assert d.data == {"a": "b"}
+
+    new_m = BaseModelToMessage(basemodel=d, message=ItemProtoWithMap)
+    assert type(new_m) == ItemProtoWithMap
+    assert new_m.name == "name?"
+    assert new_m.amount == 42
+    assert new_m.active is True
+    assert new_m.data == {"a": "b"}
+    assert new_m.IsInitialized()
 
 
-@pytest.mark.parametrize("message_name", ["ItemProtoWithMap"])
-def test_conversion_to_model_with_dict(message: Message) -> None:
-    assert type(message) == ItemProtoWithMap
-    assert message.name == "Name"
-    assert message.amount == 2
-    assert message.active is True
-    assert message.data == {"key": "value", "key2": "value2"}
-    _model = MessageToBaseModel(basemodel=ItemModelWithDict, message=message)
-    assert type(_model) == ItemModelWithDict
-    assert _model.name == "Name"
-    assert _model.amount == 2
-    assert _model.active is True
-    assert _model.data == {"key": "value", "key2": "value2"}
+def test_model_to_message_with_map() -> None:
+    d = ItemModelWithDict(name="name?", amount=42, active=True, data={"a": "b"})
+    m = BaseModelToMessage(basemodel=d, message=ItemProtoWithMap)
+    assert type(m) == ItemProtoWithMap
+    assert m.name == "name?"
+    assert m.amount == 42
+    assert m.active is True
+    assert m.data == {"a": "b"}
+    assert m.IsInitialized()
+
+    new_d = MessageToBaseModel(basemodel=ItemModelWithDict, message=m)
+    assert type(new_d) == ItemModelWithDict
+    assert new_d.name == "name?"
+    assert new_d.amount == 42
+    assert new_d.active is True
+    assert new_d.data == {"a": "b"}
 
 
-@pytest.mark.parametrize("model_name", ["ItemModelWithItem"])
-@pytest.mark.parametrize("message_name", ["ItemProtoWithSubItem"])
-def test_conversion_to_message_with_sub_item(
-    model: BaseModel, message: Message
-) -> None:
-    assert type(model) == ItemModelWithItem
-    assert model.name == "Name"
-    assert model.amount == 2
-    assert model.active is True
-    assert model.item.name == "Name"
-    assert model.item.amount == 2
-    assert model.item.active is True
-    _message = BaseModelToMessage(basemodel=model, message=message)
-    assert type(_message) == ItemProtoWithSubItem
-    assert _message.name == "Name"
-    assert _message.amount == 2
-    assert _message.active is True
-    assert _message.item.name == "Name"
-    assert _message.item.amount == 2
-    assert _message.item.active is True
+def test_conversion_to_message_with_sub_item() -> None:
+    d = ItemModelWithItem(
+        name="Name",
+        amount=2,
+        active=True,
+        item=ItemModel(name="SubName", amount=3, active=False),
+    )
+    m = BaseModelToMessage(basemodel=d, message=ItemProtoWithSubItem)
+    assert type(m) == ItemProtoWithSubItem
+    assert m.name == "Name"
+    assert m.amount == 2
+    assert m.active is True
+    assert m.item.name == "SubName"
+    assert m.item.amount == 3
+    assert m.item.active is False
+    assert m.IsInitialized()
+
+    new_d = MessageToBaseModel(basemodel=ItemModelWithItem, message=m)
+    assert type(new_d) == ItemModelWithItem
+    assert new_d.name == "Name"
+    assert new_d.amount == 2
+    assert new_d.active is True
+    assert new_d.item.name == "SubName"
+    assert new_d.item.amount == 3
+    assert new_d.item.active is False
 
 
-@pytest.mark.parametrize("message_name", ["ItemProtoWithSubItem"])
-def test_conversion_to_model_with_sub_item(message: Message) -> None:
-    assert type(message) == ItemProtoWithSubItem
-    assert message.name == "Name"
-    assert message.amount == 2
-    assert message.active is True
-    assert message.item.name == "Name"
-    assert message.item.amount == 2
-    assert message.item.active is True
-    _model = MessageToBaseModel(basemodel=ItemModelWithItem, message=message)
-    assert type(_model) == ItemModelWithItem
-    assert _model.name == "Name"
-    assert _model.amount == 2
-    assert _model.active is True
-    assert _model.item.name == "Name"
-    assert _model.item.amount == 2
-    assert _model.item.active is True
+def test_conversion_to_model_with_sub_item() -> None:
+    m = ItemProtoWithSubItem(
+        name="Name",
+        amount=2,
+        active=True,
+        item=ItemProto(name="SubName", amount=3, active=False),
+    )
+    d = MessageToBaseModel(basemodel=ItemModelWithItem, message=m)
+    assert type(d) == ItemModelWithItem
+    assert d.name == "Name"
+    assert d.amount == 2
+    assert d.active is True
+    assert d.item.name == "SubName"
+    assert d.item.amount == 3
+    assert d.item.active is False
+
+    new_m = BaseModelToMessage(basemodel=d, message=ItemProtoWithSubItem)
+    assert type(new_m) == ItemProtoWithSubItem
+    assert new_m.name == "Name"
+    assert new_m.amount == 2
+    assert new_m.active is True
+    assert new_m.item.name == "SubName"
+    assert new_m.item.amount == 3
+    assert new_m.item.active is False
+    assert new_m.IsInitialized()
 
 
-@pytest.mark.parametrize("model_name", ["ItemModelWithItemList"])
-@pytest.mark.parametrize("message_name", ["ItemProtoWithRepeatedItems"])
-def test_conversion_to_message_with_sub_item_list(
-    model: BaseModel, message: Message
-) -> None:
-    assert type(model) == ItemModelWithItemList
-    assert model.name == "Name"
-    assert model.amount == 2
-    assert model.active is True
-    assert model.items[0].name == "Name"
-    assert model.items[0].amount == 2
-    assert model.items[0].active is True
-    assert model.items[1].name == "Name"
-    assert model.items[1].amount == 2
-    assert model.items[1].active is True
-    _message = BaseModelToMessage(basemodel=model, message=message)
-    assert type(_message) == ItemProtoWithRepeatedItems
-    assert _message.name == "Name"
-    assert _message.amount == 2
-    assert _message.active is True
-    assert _message.items[0].name == "Name"
-    assert _message.items[0].amount == 2
-    assert _message.items[0].active is True
-    assert _message.items[1].name == "Name"
-    assert _message.items[1].amount == 2
-    assert _message.items[1].active is True
+def test_conversion_to_message_with_sub_item_list() -> None:
+    d = ItemModelWithItemList(
+        name="Name",
+        amount=2,
+        active=True,
+        items=[
+            ItemModel(name="SubName", amount=3, active=False),
+            ItemModel(name="SubName", amount=3, active=False),
+        ],
+    )
+    m = BaseModelToMessage(basemodel=d, message=ItemProtoWithRepeatedItems)
+    assert type(m) == ItemProtoWithRepeatedItems
+    assert m.name == "Name"
+    assert m.amount == 2
+    assert m.active is True
+    assert m.items[0].name == "SubName"
+    assert m.items[0].amount == 3
+    assert m.items[0].active is False
+    assert m.items[1].name == "SubName"
+    assert m.items[1].amount == 3
+    assert m.items[1].active is False
+    assert m.IsInitialized()
+
+    new_d = MessageToBaseModel(basemodel=ItemModelWithItemList, message=m)
+    assert type(new_d) == ItemModelWithItemList
+    assert new_d.name == "Name"
+    assert new_d.amount == 2
+    assert new_d.active is True
+    assert new_d.items[0].name == "SubName"
+    assert new_d.items[0].amount == 3
+    assert new_d.items[0].active is False
+    assert new_d.items[1].name == "SubName"
+    assert new_d.items[1].amount == 3
+    assert new_d.items[1].active is False
 
 
-@pytest.mark.parametrize("message_name", ["ItemProtoWithRepeatedItems"])
-def test_conversion_to_model_with_sub_item_list(message: Message) -> None:
-    assert type(message) == ItemProtoWithRepeatedItems
-    assert message.name == "Name"
-    assert message.amount == 2
-    assert message.active is True
-    assert message.items[0].name == "Name"
-    assert message.items[0].amount == 2
-    assert message.items[0].active is True
-    assert message.items[1].name == "Name"
-    assert message.items[1].amount == 2
-    assert message.items[1].active is True
-    _model = MessageToBaseModel(basemodel=ItemModelWithItemList, message=message)
-    assert type(_model) == ItemModelWithItemList
-    assert _model.name == "Name"
-    assert _model.amount == 2
-    assert _model.active is True
-    assert _model.items[0].name == "Name"
-    assert _model.items[0].amount == 2
-    assert _model.items[0].active is True
-    assert _model.items[1].name == "Name"
-    assert _model.items[1].amount == 2
-    assert _model.items[1].active is True
+def test_conversion_to_model_with_sub_item_list() -> None:
+    m = ItemProtoWithRepeatedItems(
+        name="Name",
+        amount=2,
+        active=True,
+        items=[
+            ItemProto(name="SubName", amount=3, active=False),
+            ItemProto(name="SubName", amount=3, active=False),
+        ],
+    )
+    d = MessageToBaseModel(basemodel=ItemModelWithItemList, message=m)
+    assert type(d) == ItemModelWithItemList
+    assert d.name == "Name"
+    assert d.amount == 2
+    assert d.active is True
+    assert d.items[0].name == "SubName"
+    assert d.items[0].amount == 3
+    assert d.items[0].active is False
+    assert d.items[1].name == "SubName"
+    assert d.items[1].amount == 3
+    assert d.items[1].active is False
+
+    new_m = BaseModelToMessage(basemodel=d, message=ItemProtoWithRepeatedItems)
+    assert type(new_m) == ItemProtoWithRepeatedItems
+    assert new_m.name == "Name"
+    assert new_m.amount == 2
+    assert new_m.active is True
+    assert new_m.items[0].name == "SubName"
+    assert new_m.items[0].amount == 3
+    assert new_m.items[0].active is False
+    assert new_m.items[1].name == "SubName"
+    assert new_m.items[1].amount == 3
+    assert new_m.items[1].active is False
+    assert new_m.IsInitialized()
 
 
-@pytest.mark.parametrize("model_name", ["ItemModelWithEnum"])
-@pytest.mark.parametrize("message_name", ["ItemProtoWithEnum"])
-def test_conversion_to_message_with_enum(model: BaseModel, message: Message) -> None:
-    assert type(model) == ItemModelWithEnum
-    assert model.name == "Name"
-    assert model.amount == 2
-    assert model.active is True
-    assert model.type == ItemType.TYPE_1
-    _message = BaseModelToMessage(basemodel=model, message=message)
-    assert type(_message) == ItemProtoWithEnum
-    assert _message.name == "Name"
-    assert _message.amount == 2
-    assert _message.active is True
-    assert _message.type == 1
+def test_conversion_to_message_with_enum() -> None:
+    d = ItemModelWithEnum(name="Name", amount=2, active=True, type=ItemType.TYPE_1)
+    m = BaseModelToMessage(basemodel=d, message=ItemProtoWithEnum)
+    assert type(m) == ItemProtoWithEnum
+    assert m.name == "Name"
+    assert m.amount == 2
+    assert m.active is True
+    assert m.type == 1
+    assert m.IsInitialized()
+
+    new_d = MessageToBaseModel(basemodel=ItemModelWithEnum, message=m)
+    assert type(new_d) == ItemModelWithEnum
+    assert new_d.name == "Name"
+    assert new_d.amount == 2
+    assert new_d.active is True
+    assert new_d.type == ItemType.TYPE_1
 
 
-@pytest.mark.parametrize("message_name", ["ItemProtoWithEnum"])
-def test_conversion_to_model_with_enum(message: Message) -> None:
-    assert type(message) == ItemProtoWithEnum
-    assert message.name == "Name"
-    assert message.amount == 2
-    assert message.active is True
-    assert message.type == 1
-    _model = MessageToBaseModel(basemodel=ItemModelWithEnum, message=message)
-    assert type(_model) == ItemModelWithEnum
-    assert _model.name == "Name"
-    assert _model.amount == 2
-    assert _model.active is True
-    assert _model.type == ItemType.TYPE_1
+def test_conversion_to_model_with_enum() -> None:
+    m = ItemProtoWithEnum(name="Name", amount=2, active=True, type=1)  # type: ignore
+    d = MessageToBaseModel(basemodel=ItemModelWithEnum, message=m)
+    assert type(d) == ItemModelWithEnum
+    assert d.name == "Name"
+    assert d.amount == 2
+    assert d.active is True
+    assert d.type == ItemType.TYPE_1
+
+    new_m = BaseModelToMessage(basemodel=d, message=ItemProtoWithEnum)
+    assert type(new_m) == ItemProtoWithEnum
+    assert new_m.name == "Name"
+    assert new_m.amount == 2
+    assert new_m.active is True
+    assert new_m.type == 1
+    assert new_m.IsInitialized()

@@ -1,15 +1,14 @@
-from typing import Type
+from typing import Any, Type
 
 from google.protobuf import json_format
-from google.protobuf.message import Message
 from pydantic import BaseModel
 
 
 def BaseModelToMessage(
     basemodel: BaseModel,
-    message: Message,
+    message: Any,
     ignore_unknown_fields: bool = True,
-) -> Message:
+) -> Any:
     """Converts a BaseModel object to a protobuf message.
 
     Args:
@@ -23,14 +22,14 @@ def BaseModelToMessage(
     """
     return json_format.Parse(
         text=basemodel.json().encode("utf8"),
-        message=message,
+        message=message(),  # type: ignore
         ignore_unknown_fields=ignore_unknown_fields,
     )
 
 
 def MessageToBaseModel(
     basemodel: Type[BaseModel],
-    message: Message,
+    message: Any,
     including_default_value_fields: bool = True,
     preserving_proto_field_name: bool = False,
     use_integers_for_enums: bool = True,

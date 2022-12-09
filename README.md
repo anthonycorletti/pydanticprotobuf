@@ -12,54 +12,53 @@ pip install pydanticprotobuf
 
 ## Usage
 
-_Generation of `person_message` not shown._
+1. Create your proto file
 
-`BaseModel` to `Message`
+    ```proto
+    // person.proto
+    syntax = "proto3";
 
-```proto
-syntax = "proto3";
+    package main;
 
-package main;
+    message Person {
+        string name = 1;
+        int32 age = 2;
+    }
+    ```
 
-message Person {
-    string name = 1;
-    int32 age = 2;
-}
-```
+1. Generate the pb2 files
 
-```python
-# assume `person_message` is a protobuf message imported from a generated pb2 file
-from pydantic import BaseModel
-from pydanticprotobuf import BaseModelToMessage
+    ```sh
+    python -m grpc_tools.protoc -I . \
+    --python_out=. \
+    --grpc_python_out=. \
+    --mypy_out=. \
+    --mypy_grpc_out=. \
+    person.proto
+    ```
 
-class Person(BaseModel):
-    name: str = "Anthony"
-    age: int = 42
+1. Use the `BaseModelToMessage` and `MessageToBaseModel` classes to convert between the two.
 
-person = Person()
-assert person.name == "Anthony"
-assert person.age == 42
+    ```python
+    from pydantic import BaseModel
+    from pydanticprotobuf import BaseModelToMessage, MessageToBaseModel
+    from person_pb2 import Person
 
-message = BaseModelToMessage(basemodel=model, message=person_message)
-assert message.name == "Anthony"
-assert message.age == 42
-```
+    class PersonBase(BaseModel):
+        name: str = "Anthony"
+        age: int = 42
 
+    person = PersonBase()
+    assert person.name == "Anthony"
+    assert person.age == 42
 
-`Message` to `BaseModel`
+    message = BaseModelToMessage(basemodel=person, message=Person)
+    assert message.name == "Anthony"
+    assert message.age == 42
 
-Using the same proto and `BaseModel` as above;
-
-```python
-from pydanticprotobuf import MessageToBaseModel
-
-assert message.name == "Anthony"
-assert message.age == 42
-
-model = MessageToBaseModel(basemodel=ItemModelWithList, message=message)
-
-assert model.name == "Anthony"
-assert model.age == 42
-```
+    model = MessageToBaseModel(basemodel=PersonBase, message=message)
+    assert model.name == "Anthony"
+    assert model.age == 42
+    ```
 
 More detailed examples are located in the [tests](tests).

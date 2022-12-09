@@ -1,18 +1,7 @@
 from enum import Enum, unique
 from typing import Dict, List
 
-import pytest
-from google.protobuf.message import Message
 from pydantic import BaseModel
-
-from tests.protobuf.examples_pb2 import (
-    ItemProto,
-    ItemProtoWithEnum,
-    ItemProtoWithMap,
-    ItemProtoWithRepeated,
-    ItemProtoWithRepeatedItems,
-    ItemProtoWithSubItem,
-)
 
 
 @unique
@@ -22,57 +11,26 @@ class ItemType(Enum):
 
 
 class ItemModel(BaseModel):
-    name: str = "Name"
-    amount: int = 2
-    active: bool = True
+    name: str
+    amount: int
+    active: bool
 
 
 class ItemModelWithList(ItemModel):
-    extras: List[str] = ["a", "b"]
+    extras: List[str]
 
 
 class ItemModelWithDict(ItemModel):
-    data: Dict[str, str] = {"key": "value", "key2": "value2"}
+    data: Dict[str, str]
 
 
 class ItemModelWithItem(ItemModel):
-    item: ItemModel = ItemModel()
+    item: ItemModel
 
 
 class ItemModelWithItemList(ItemModel):
-    items: List[ItemModel] = [ItemModel(), ItemModel()]
+    items: List[ItemModel]
 
 
 class ItemModelWithEnum(ItemModel):
-    type: ItemType = ItemType.TYPE_1
-
-
-MODELS = [
-    ItemModel,
-    ItemModelWithList,
-    ItemModelWithDict,
-    ItemModelWithItem,
-    ItemModelWithItemList,
-    ItemModelWithEnum,
-]
-MODEL_DISPATCH_TABLE = {model.__name__: model() for model in MODELS}
-
-MESSAGES = [
-    ItemProto,
-    ItemProtoWithRepeated,
-    ItemProtoWithMap,
-    ItemProtoWithSubItem,
-    ItemProtoWithRepeatedItems,
-    ItemProtoWithEnum,
-]
-MESSAGE_DISPATCH_TABLE = {message.__name__: message() for message in MESSAGES}
-
-
-@pytest.fixture()
-def model(model_name: str) -> BaseModel:
-    return MODEL_DISPATCH_TABLE[model_name]
-
-
-@pytest.fixture()
-def message(message_name: str) -> Message:
-    return MESSAGE_DISPATCH_TABLE[message_name]
+    type: ItemType
