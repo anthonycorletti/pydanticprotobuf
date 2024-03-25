@@ -37,7 +37,7 @@ ItemProto = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _ITEMPROTO,
-        "__module__": "protobuf.examples_pb2"
+        "__module__": "protobuf.examples_pb2",
         # @@protoc_insertion_point(class_scope:examples.ItemProto)
     },
 )
@@ -48,7 +48,7 @@ ItemProtoWithRepeated = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _ITEMPROTOWITHREPEATED,
-        "__module__": "protobuf.examples_pb2"
+        "__module__": "protobuf.examples_pb2",
         # @@protoc_insertion_point(class_scope:examples.ItemProtoWithRepeated)
     },
 )
@@ -63,12 +63,12 @@ ItemProtoWithMap = _reflection.GeneratedProtocolMessageType(
             (_message.Message,),
             {
                 "DESCRIPTOR": _ITEMPROTOWITHMAP_DATAENTRY,
-                "__module__": "protobuf.examples_pb2"
+                "__module__": "protobuf.examples_pb2",
                 # @@protoc_insertion_point(class_scope:examples.ItemProtoWithMap.DataEntry)
             },
         ),
         "DESCRIPTOR": _ITEMPROTOWITHMAP,
-        "__module__": "protobuf.examples_pb2"
+        "__module__": "protobuf.examples_pb2",
         # @@protoc_insertion_point(class_scope:examples.ItemProtoWithMap)
     },
 )
@@ -80,7 +80,7 @@ ItemProtoWithSubItem = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _ITEMPROTOWITHSUBITEM,
-        "__module__": "protobuf.examples_pb2"
+        "__module__": "protobuf.examples_pb2",
         # @@protoc_insertion_point(class_scope:examples.ItemProtoWithSubItem)
     },
 )
@@ -91,7 +91,7 @@ ItemProtoWithRepeatedItems = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _ITEMPROTOWITHREPEATEDITEMS,
-        "__module__": "protobuf.examples_pb2"
+        "__module__": "protobuf.examples_pb2",
         # @@protoc_insertion_point(class_scope:examples.ItemProtoWithRepeatedItems)
     },
 )
@@ -102,7 +102,7 @@ ItemProtoWithEnum = _reflection.GeneratedProtocolMessageType(
     (_message.Message,),
     {
         "DESCRIPTOR": _ITEMPROTOWITHENUM,
-        "__module__": "protobuf.examples_pb2"
+        "__module__": "protobuf.examples_pb2",
         # @@protoc_insertion_point(class_scope:examples.ItemProtoWithEnum)
     },
 )
